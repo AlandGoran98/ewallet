@@ -16,19 +16,21 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  Stream<User?> get _authChangeState {
+    return _auth.authStateChanges();
+  }
+
+  bool _isLogin = false;
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   // final TextEditingController _passwordController = TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  AuthenticationServices _authService =
-      AuthenticationServices(FirebaseAuth.instance);
-  @override
-  void initState() {
-    // TODO: implement initState
-    verifications();
-    super.initState();
-  }
+  // AuthenticationServices _authService =
+  //     AuthenticationServices(FirebaseAuth.instance);
 
   @override
   void dispose() {
@@ -37,13 +39,26 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  Future verifications() async {
-    final user = await _authService.signIN(_phoneController.value.text);
-    if (user != null) {
-      Navigator.popAndPushNamed(context, HomePage.routeName,
-          arguments: FirebaseAuth.instance.currentUser!.uid);
+  Future signInEmailPassword(String email, String password) async {
+    try {
+      final _user = await signInEmailPassword(email, password);
+      if (_user != null) {
+        user = _user;
+        Navigator.pushReplacementNamed(
+          context,
+          HomePage.routeName,
+        );
+      }
+    } catch (e) {
+      throw e;
     }
   }
+
+  Future? user;
+  // Future verifications() async {
+  //   final phone =
+  //       await _authService.signInWithPhoneNumber(_phoneController.value.text);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,155 +73,213 @@ class _LoginState extends State<Login> {
             color: Colors.yellow,
           ),
           backgroundColor: klightBlue),
-      body: Form(
-        key: _form,
-        child: Container(
-          width: size.width,
-          height: size.height,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [klightBlue, klightPurpule],
-                tileMode: TileMode.clamp),
-          ),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 16.0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'LOGIN',
-                        style: kRobotoWhiteLarge,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 60, vertical: 10),
+      body: _isLogin
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Form(
+              key: _form,
+              child: Container(
+                width: size.width,
+                height: size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [klightBlue, klightPurpule],
+                      tileMode: TileMode.clamp),
+                ),
+                child: Center(
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'LOGIN',
+                              style: kRobotoWhiteLarge,
+                            ),
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //       horizontal: 60, vertical: 10),
+                        //   child: Column(
+                        //     children: [
+                        //       Align(
+                        //         alignment: Alignment.bottomLeft,
+                        //         child: Text(
+                        //           "Phone Number",
+                        //           style: kRoboto,
+                        //         ),
+                        //       ),
+                        //       TextFormField(
+                        //         controller: _phoneController,
+                        //         keyboardType: TextInputType.phone,
+                        //         decoration: InputDecoration(
+                        //           hintText: "Phone Number",
+                        //           hintStyle: kRobotoTextField,
+                        //           fillColor: Colors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.circular(20.0)),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value == null ||
+                        //               (value.trim().length == 0)) {
+                        //             return "Please Enter Your Phone Number";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 60, vertical: 10),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Email",
+                                  style: kRoboto,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Your Email",
+                                  hintStyle: kRobotoTextField,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                ),
+                                validator: (value) {
+                                  if (value == null && !value!.contains("@")) {
+                                    return "Please Enter valid email Adreess";
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 60, vertical: 10),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "Password",
+                                  style: kRoboto,
+                                ),
+                              ),
+                              TextFormField(
+                                // controller: _phoneController,
+                                obscureText: true,
+                                keyboardType: TextInputType.visiblePassword,
+                                decoration: InputDecoration(
+                                  hintText: "Password",
+                                  hintStyle: kRobotoTextField,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                ),
+                                validator: (value) {
+                                  if (value == null && (value!.length < 8)) {
+                                    return "Please Enter valid Password more than 8 characters";
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                         Align(
-                          alignment: Alignment.bottomLeft,
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 30.0),
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Forgot Password?",
+                                style: kRoboto,
+                              ),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            var isValid = _form.currentState!.validate();
+                            if (!isValid) {
+                              return;
+                            }
+                            try {
+                              // verifications();
+                              _form.currentState!.save();
+                              signInEmailPassword(_emailController.value.text,
+                                  _passwordController.value.text);
+                            } catch (e) {
+                              setState(() {
+                                _isLogin = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: klightPurpule,
+                                  content: Row(
+                                    children: [
+                                      Icon(Icons.delete),
+                                      Text(
+                                        e.toString(),
+                                        style: kRobotoMedium,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                           child: Text(
-                            "Phone Number",
+                            "LOGIN",
                             style: kRoboto,
                           ),
+                          style: ElevatedButton.styleFrom(
+                              primary: kYellow,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(35.0),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 45.0, vertical: 10.0)),
                         ),
-                        TextFormField(
-                          controller: _phoneController,
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: "Phone Number",
-                            hintStyle: kRobotoTextField,
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                          ),
-                          validator: (value) {
-                            if (value == null || (value.trim().length == 0)) {
-                              return "Please Enter Your Phone Number";
-                            }
-                            return null;
-                          },
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Text("don't have an account?", style: kRoboto),
+                        //     TextButton(
+                        //         onPressed: () {
+                        //           Navigator.push(context,
+                        //               MaterialPageRoute(builder: (context) => SignUP()));
+                        //         },
+                        //         child: Text("Sign Up"))
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(
-                  //       horizontal: 60, vertical: 10),
-                  //   child: Column(
-                  //     children: [
-                  //       Align(
-                  //         alignment: Alignment.topLeft,
-                  //         child: Text(
-                  //           "Password",
-                  //           style: kRoboto,
-                  //         ),
-                  //       ),
-                  //       TextFormField(
-                  //         // controller: _phoneController,
-                  //         obscureText: true,
-                  //         keyboardType: TextInputType.visiblePassword,
-                  //         decoration: InputDecoration(
-                  //           hintText: "Password",
-                  //           hintStyle: kRobotoTextField,
-                  //           fillColor: Colors.white,
-                  //           filled: true,
-                  //           border: OutlineInputBorder(
-                  //               borderRadius: BorderRadius.circular(20.0)),
-                  //         ),
-                  //         // validator: (value) {
-                  //         //   if (value == null) {
-                  //         //     return "Please Enter Password";
-                  //         //   }
-                  //         // },
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 30.0),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Forgot Password?",
-                          style: kRoboto,
-                        ),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      var isValid = _form.currentState!.validate();
-                      if (!isValid) {
-                        return;
-                      }
-                      _form.currentState!.save();
-
-                      Navigator.pushReplacementNamed(
-                        context,
-                        Verfications.routeName,
-                      );
-                    },
-                    child: Text(
-                      "LOGIN",
-                      style: kRoboto,
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        primary: kYellow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 45.0, vertical: 10.0)),
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text("don't have an account?", style: kRoboto),
-                  //     TextButton(
-                  //         onPressed: () {
-                  //           Navigator.push(context,
-                  //               MaterialPageRoute(builder: (context) => SignUP()));
-                  //         },
-                  //         child: Text("Sign Up"))
-                  //   ],
-                  // ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

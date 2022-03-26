@@ -6,13 +6,10 @@ class AuthenticationServices {
   final FirebaseAuth? auth;
 
   AuthenticationServices(this.auth);
-  Stream<User?> get authChangeState {
-    return auth!.authStateChanges();
-  }
 
-  Future signIN(String phone) async {
+  Future signInWithPhoneNumber(String phone) async {
     final signIn = await auth!.verifyPhoneNumber(
-      phoneNumber: '+44 7123 123 456',
+      phoneNumber: "+9647512405455",
       verificationCompleted: (PhoneAuthCredential credential) async {
         // ANDROID ONLY!
 
