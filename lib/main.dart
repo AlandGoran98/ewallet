@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/model/auth_services.dart';
 import 'package:ewallet/provider/log_provider.dart';
+import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/chart_screen.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/login.dart';
@@ -24,32 +25,47 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'E-wallet',
-      theme: ThemeData(
-        colorScheme: ColorScheme(
-            brightness: Brightness.light,
-            primary: klightBlue,
-            onPrimary: Colors.black,
-            secondary: kYellow,
-            onSecondary: klightBlue,
-            error: Colors.red,
-            onError: kYellow,
-            background: klightBlue,
-            onBackground: klightPurpule,
-            surface: klightBlue,
-            onSurface: klightPurpule),
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: LogItems(),
+        ),
+        Provider(
+          create: (_) => AuthenticationServices(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+            create: (_) =>
+                Provider.of<AuthenticationServices>(context).authChangeState,
+            initialData: Login()),
+        ChangeNotifierProvider.value(value: ThemeChange()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'E-wallet',
+        theme: ThemeData(
+          colorScheme: ColorScheme(
+              brightness: Brightness.light,
+              primary: klightBlue,
+              onPrimary: Colors.black,
+              secondary: kYellow,
+              onSecondary: klightBlue,
+              error: Colors.red,
+              onError: kYellow,
+              background: klightBlue,
+              onBackground: klightPurpule,
+              surface: klightBlue,
+              onSurface: klightPurpule),
+          primarySwatch: Colors.blue,
+        ),
+        home: Login(),
+        routes: {
+          HomePage.routeName: (context) => HomePage(),
+          Login.routeName: (context) => Login(),
+          ProfileScreen.routeName: (context) => ProfileScreen(),
+          ChartStatistics.routeName: (context) => ChartStatistics(),
+          Verfications.routeName: (context) => Verfications(),
+        },
       ),
-      home: Login(),
-      routes: {
-        HomePage.routeName: (context) => HomePage(),
-        Login.routeName: (context) => Login(),
-        ProfileScreen.routeName: (context) => ProfileScreen(),
-        ChartStatistics.routeName: (context) => ChartStatistics(),
-        Verfications.routeName: (context) => Verfications(),
-      },
     );
   }
 }
