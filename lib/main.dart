@@ -24,46 +24,32 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: LogItems(),
-        ),
-        Provider(
-          create: (_) => AuthenticationServices(FirebaseAuth.instance),
-        ),
-        StreamProvider(
-            create: (_) =>
-                Provider.of<AuthenticationServices>(context).authChangeState,
-            initialData: AuthenticationServices),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'E-wallet',
-        theme: ThemeData(
-          colorScheme: ColorScheme(
-              brightness: Brightness.light,
-              primary: klightBlue,
-              onPrimary: Colors.black,
-              secondary: kYellow,
-              onSecondary: klightBlue,
-              error: Colors.red,
-              onError: kYellow,
-              background: klightBlue,
-              onBackground: klightPurpule,
-              surface: klightBlue,
-              onSurface: klightPurpule),
-          primarySwatch: Colors.blue,
-        ),
-        home: Login(),
-        routes: {
-          HomePage.routeName: (context) => HomePage(),
-          Login.routeName: (context) => Login(),
-          ProfileScreen.routeName: (context) => ProfileScreen(),
-          ChartStatistics.routeName: (context) => ChartStatistics(),
-          Verfications.routeName: (context) => Verfications(),
-        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'E-wallet',
+      theme: ThemeData(
+        colorScheme: ColorScheme(
+            brightness: Brightness.light,
+            primary: klightBlue,
+            onPrimary: Colors.black,
+            secondary: kYellow,
+            onSecondary: klightBlue,
+            error: Colors.red,
+            onError: kYellow,
+            background: klightBlue,
+            onBackground: klightPurpule,
+            surface: klightBlue,
+            onSurface: klightPurpule),
+        primarySwatch: Colors.blue,
       ),
+      home: Login(),
+      routes: {
+        HomePage.routeName: (context) => HomePage(),
+        Login.routeName: (context) => Login(),
+        ProfileScreen.routeName: (context) => ProfileScreen(),
+        ChartStatistics.routeName: (context) => ChartStatistics(),
+        Verfications.routeName: (context) => Verfications(),
+      },
     );
   }
 }
