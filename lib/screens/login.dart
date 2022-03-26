@@ -1,11 +1,13 @@
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/model/auth_services.dart';
+import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/verification.dart';
 import 'package:ewallet/widgets/login_widget.dart';
 import 'package:ewallet/widgets/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   static const routeName = "/login";
@@ -17,9 +19,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  Stream<User?> get _authChangeState {
-    return _auth.authStateChanges();
-  }
 
   bool _isLogin = false;
   final TextEditingController _phoneController = TextEditingController();
@@ -29,8 +28,14 @@ class _LoginState extends State<Login> {
   // final TextEditingController _passwordController = TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-  // AuthenticationServices _authService =
-  //     AuthenticationServices(FirebaseAuth.instance);
+  AuthenticationServices _authService =
+      AuthenticationServices(FirebaseAuth.instance);
+  @override
+  void initState() {
+    _form;
+
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -39,29 +44,57 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  Future signInEmailPassword(String email, String password) async {
+  // Future signInEmailPassword(String email, String password) async {
+  //   try {
+  //     // if (_user != null) {
+
+  //     // }
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+
+  Future? user;
+  Future verifications() async {
     try {
-      final _user = await signInEmailPassword(email, password);
-      if (_user != null) {
-        user = _user;
-        Navigator.pushReplacementNamed(
-          context,
-          HomePage.routeName,
-        );
-      }
+      // verifications();
+      // _form.currentState!.save();
+      // final _user =
+
+      await _auth.signInWithEmailAndPassword(
+          email: _emailController.value.text,
+          password: _passwordController.value.text);
+      await _authService.signInWithPhoneNumber(_phoneController.value.text);
+
+      //  user = _user;
+      Navigator.pushReplacementNamed(
+        context,
+        Verfications.routeName,
+      );
     } catch (e) {
-      throw e;
+      setState(() {
+        _isLogin = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: klightPurpule,
+          content: Row(
+            children: [
+              Icon(Icons.delete),
+              Text(
+                e.toString(),
+                style: kRobotoMedium,
+              )
+            ],
+          ),
+        ),
+      );
     }
   }
 
-  Future? user;
-  // Future verifications() async {
-  //   final phone =
-  //       await _authService.signInWithPhoneNumber(_phoneController.value.text);
-  // }
-
   @override
   Widget build(BuildContext context) {
+    ThemeChange theme = Provider.of<ThemeChange>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +102,9 @@ class _LoginState extends State<Login> {
           shadowColor: Colors.transparent,
           leading: IconButton(
             icon: Icon(Icons.lightbulb_outline),
-            onPressed: () {},
+            onPressed: () {
+              theme.changeTheme();
+            },
             color: Colors.yellow,
           ),
           backgroundColor: klightBlue),
@@ -86,7 +121,9 @@ class _LoginState extends State<Login> {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [klightBlue, klightPurpule],
+                      colors: theme.isLight
+                          ? [kYellow, klightBlue]
+                          : [klightBlue, klightPurpule],
                       tileMode: TileMode.clamp),
                 ),
                 child: Center(
@@ -104,41 +141,41 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: 60, vertical: 10),
-                        //   child: Column(
-                        //     children: [
-                        //       Align(
-                        //         alignment: Alignment.bottomLeft,
-                        //         child: Text(
-                        //           "Phone Number",
-                        //           style: kRoboto,
-                        //         ),
-                        //       ),
-                        //       TextFormField(
-                        //         controller: _phoneController,
-                        //         keyboardType: TextInputType.phone,
-                        //         decoration: InputDecoration(
-                        //           hintText: "Phone Number",
-                        //           hintStyle: kRobotoTextField,
-                        //           fillColor: Colors.white,
-                        //           filled: true,
-                        //           border: OutlineInputBorder(
-                        //               borderRadius:
-                        //                   BorderRadius.circular(20.0)),
-                        //         ),
-                        //         validator: (value) {
-                        //           if (value == null ||
-                        //               (value.trim().length == 0)) {
-                        //             return "Please Enter Your Phone Number";
-                        //           }
-                        //           return null;
-                        //         },
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 60, vertical: 10),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  "Phone Number",
+                                  style: kRoboto,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                  hintText: "Phone Number",
+                                  hintStyle: kRobotoTextField,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                ),
+                                validator: (value) {
+                                  if (value == null ||
+                                      (value.trim().length == 0)) {
+                                    return "Please Enter Your Phone Number";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 60, vertical: 10),
@@ -185,7 +222,7 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               TextFormField(
-                                // controller: _phoneController,
+                                controller: _passwordController,
                                 obscureText: true,
                                 keyboardType: TextInputType.visiblePassword,
                                 decoration: InputDecoration(
@@ -225,30 +262,10 @@ class _LoginState extends State<Login> {
                             if (!isValid) {
                               return;
                             }
-                            try {
-                              // verifications();
-                              _form.currentState!.save();
-                              signInEmailPassword(_emailController.value.text,
-                                  _passwordController.value.text);
-                            } catch (e) {
-                              setState(() {
-                                _isLogin = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: klightPurpule,
-                                  content: Row(
-                                    children: [
-                                      Icon(Icons.delete),
-                                      Text(
-                                        e.toString(),
-                                        style: kRobotoMedium,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
+                            setState(() {
+                              _isLogin = true;
+                            });
+                            verifications();
                           },
                           child: Text(
                             "LOGIN",

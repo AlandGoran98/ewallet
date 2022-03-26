@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/chart_screen.dart';
 import 'package:ewallet/screens/home_screen.dart';
 import 'package:ewallet/screens/profile_screen.dart';
@@ -7,8 +8,10 @@ import 'package:ewallet/widgets/credit_card.dart';
 import 'package:ewallet/widgets/drawer.dart';
 import 'package:ewallet/widgets/home_prop_cards.dart';
 import 'package:ewallet/widgets/monthly_log.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -18,12 +21,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _auth = FirebaseAuth.instance;
   final time = DateTime.now();
   List _listPage = [];
   int _currentIndex = 0;
   Widget? _currentPage;
+  Future currentUsers() async {
+    User? user = _auth.currentUser;
+    print(user);
+  }
+
   @override
   void initState() {
+    currentUsers();
     _listPage
       ..add(HomeScreen())
       ..add(ChartStatistics())
@@ -51,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           shadowColor: Colors.transparent,
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: const EdgeInsets.only(right: 20.0),
               child: const CircleAvatar(
                 radius: 20,
               ),

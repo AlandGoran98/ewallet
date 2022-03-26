@@ -7,6 +7,10 @@ class AuthenticationServices {
 
   AuthenticationServices(this.auth);
 
+  Stream<User?> get authChangeState {
+    return auth!.authStateChanges();
+  }
+
   Future signInWithPhoneNumber(String phone) async {
     final signIn = await auth!.verifyPhoneNumber(
       phoneNumber: "+9647512405455",
