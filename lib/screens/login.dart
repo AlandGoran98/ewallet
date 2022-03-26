@@ -19,7 +19,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-
+  bool _isLight = false;
   bool _isLogin = false;
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -103,7 +103,9 @@ class _LoginState extends State<Login> {
           leading: IconButton(
             icon: Icon(Icons.lightbulb_outline),
             onPressed: () {
-              theme.changeTheme();
+              // setState(() {
+              //   _isLight = !_isLight;
+              // });
             },
             color: Colors.yellow,
           ),
@@ -121,7 +123,7 @@ class _LoginState extends State<Login> {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: theme.isLight
+                      colors: _isLight
                           ? [kYellow, klightBlue]
                           : [klightBlue, klightPurpule],
                       tileMode: TileMode.clamp),
