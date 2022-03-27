@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class DrawerWidget extends StatelessWidget {
           ),
           TextButtonDrawer(
             text: "Profile",
-            function: () {},
+            function: () {
+              Navigator.pushReplacementNamed(context, HomePage.routeName);
+            },
           ),
           TextButtonDrawer(
             text: "Report",

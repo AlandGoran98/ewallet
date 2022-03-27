@@ -3,8 +3,10 @@ import 'package:ewallet/constants.dart';
 import 'package:flutter/material.dart';
 
 class CreditCard extends StatelessWidget {
-  const CreditCard({Key? key}) : super(key: key);
-
+  const CreditCard({Key? key, required this.text, required this.balance})
+      : super(key: key);
+  final double balance;
+  final String? text;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -38,7 +40,7 @@ class CreditCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                CreditText2(text: "\$57,00.00"),
+                CreditText2(text: "\$${balance.toString()}"),
               ],
             ),
             SizedBox(
@@ -47,7 +49,7 @@ class CreditCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CreditText1(text: "Aland Abdulmajid Mahmood"),
+                CreditText1(text: "${text}"),
                 Row(
                   children: [
                     CreditText2(text: "5282 " + "3456 " + "7890 " + "1289"),

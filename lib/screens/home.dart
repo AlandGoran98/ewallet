@@ -1,6 +1,8 @@
+//docId=userId fname lname email pass(hash)=userPass username(fname+lname) national ID address created_time phone pinCode balance currency
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/provider/theme_provider.dart';
+import 'package:ewallet/provider/user_provider.dart';
 import 'package:ewallet/screens/chart_screen.dart';
 import 'package:ewallet/screens/home_screen.dart';
 import 'package:ewallet/screens/profile_screen.dart';
@@ -23,22 +25,34 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _auth = FirebaseAuth.instance;
   final time = DateTime.now();
+  // String? userId;
+  UserId? userIdProvider;
+  List<UserData> userDataList = [];
   List _listPage = [];
   int _currentIndex = 0;
   Widget? _currentPage;
   Future currentUsers() async {
-    User? user = _auth.currentUser;
-    print(user);
+    User? _user = _auth.currentUser;
+    print(_user!.uid);
+    String _useruid = _user.uid;
+    // userId = _useruid;
+    userIdProvider = UserId(userId: _useruid);
+    print("${userIdProvider!.userId.toString()}  this one");
   }
 
   @override
   void initState() {
+    // print(userId);
+    print("$userIdProvider  this one");
+    // print(Provider.of<UserId>(context, listen: false).userId);
     currentUsers();
+
     _listPage
       ..add(HomeScreen())
       ..add(ChartStatistics())
       ..add(ProfileScreen());
     _currentPage = HomeScreen();
+
     // getCurrentPage(currentIndex);
     super.initState();
   }
@@ -52,6 +66,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // UserData _userDataProvider = Provider.of(context, listen: false);
+    Users _userFireData = Provider.of<Users>(context, listen: false);
+
+    // userDataList = _userFireData.getUserData(userId) as List<UserData>;
+    // print(userDataList);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: DrawerWidget(),

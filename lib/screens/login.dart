@@ -64,12 +64,12 @@ class _LoginState extends State<Login> {
       await _auth.signInWithEmailAndPassword(
           email: _emailController.value.text,
           password: _passwordController.value.text);
-      await _authService.signInWithPhoneNumber(_phoneController.value.text);
+      // await _authService.signInWithPhoneNumber(_phoneController.value.text);
 
       //  user = _user;
       Navigator.pushReplacementNamed(
         context,
-        Verfications.routeName,
+        HomePage.routeName,
       );
     } catch (e) {
       setState(() {
@@ -77,12 +77,13 @@ class _LoginState extends State<Login> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: Duration(seconds: 5),
           backgroundColor: klightPurpule,
           content: Row(
             children: [
               Icon(Icons.delete),
               Text(
-                e.toString(),
+                "invalid Email and Password",
                 style: kRobotoMedium,
               )
             ],
@@ -141,41 +142,41 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 60, vertical: 10),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "Phone Number",
-                                  style: kRoboto,
-                                ),
-                              ),
-                              TextFormField(
-                                controller: _phoneController,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  hintText: "Phone Number",
-                                  hintStyle: kRobotoTextField,
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(20.0)),
-                                ),
-                                validator: (value) {
-                                  if (value == null ||
-                                      (value.trim().length == 0)) {
-                                    return "Please Enter Your Phone Number";
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //       horizontal: 60, vertical: 10),
+                        //   child: Column(
+                        //     children: [
+                        //       Align(
+                        //         alignment: Alignment.bottomLeft,
+                        //         child: Text(
+                        //           "Phone Number",
+                        //           style: kRoboto,
+                        //         ),
+                        //       ),
+                        //       TextFormField(
+                        //         controller: _phoneController,
+                        //         keyboardType: TextInputType.phone,
+                        //         decoration: InputDecoration(
+                        //           hintText: "Phone Number",
+                        //           hintStyle: kRobotoTextField,
+                        //           fillColor: Colors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.circular(20.0)),
+                        //         ),
+                        //         validator: (value) {
+                        //           if (value == null ||
+                        //               (value.trim().length == 0)) {
+                        //             return "Please Enter Your Phone Number";
+                        //           }
+                        //           return null;
+                        //         },
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 60, vertical: 10),
