@@ -38,8 +38,13 @@ class MyApp extends StatelessWidget {
         //     create: (context) =>
         //         Provider.of<AuthenticationServices>(context).authChangeState,
         //     initialData: Login()),
+
         ChangeNotifierProvider.value(value: ThemeChange()),
-        ChangeNotifierProvider(create: (context) => Users()),
+
+        ChangeNotifierProvider<Users>(
+          create: (context) => Users(),
+        ),
+
         // ChangeNotifierProvider.value(value: UserId()),
       ],
       child: MaterialApp(

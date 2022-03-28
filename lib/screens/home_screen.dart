@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
   //   _useruid = userId.toString();
   // }
 
-  double? _balance;
+  String? _balance;
   String? _username;
   HomeScreen({Key? key}) : super(key: key);
   FirebaseFirestore _instance = FirebaseFirestore.instance;
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   CreditCard(
-                    balance: _balance ?? snap!.balance!.toDouble(),
+                    balance: _balance ?? snap!.balance!.toString(),
                     text: _username ?? snap!.username!.toString(),
                   ),
                   Row(

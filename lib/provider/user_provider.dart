@@ -22,12 +22,12 @@ class DataBase {
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
-      userId: userId,
+      // userId: userId,
       username: snapshot["username"],
       email: snapshot['email'],
       national_id: snapshot['national_id'],
       phone: snapshot['phone'],
-      accountCreationTime: snapshot['created_time'],
+      created_time: snapshot['created_time'],
       pincode: snapshot['pincode'],
       password: snapshot['pass'],
       firstname: snapshot['fname'],
@@ -35,7 +35,7 @@ class DataBase {
       address: snapshot['address'],
       balance: snapshot['balance'],
       currency: snapshot['currency'],
-      Location: snapshot['location'],
+      // Location: snapshot['location'],
     );
   }
 
@@ -50,32 +50,37 @@ class DataBase {
 }
 
 class UserData {
-  String? userId;
-  Timestamp? accountCreationTime;
+  List<UserData> _userListData = [];
+  List<UserData> get userListData {
+    return _userListData;
+  }
+
+  // String? userId;
+  Timestamp? created_time;
   String? pincode;
   String? password;
   String? firstname;
   String? lastName;
   String? address;
-  int? balance;
+  String? balance;
   // final DateTime birthDate;
   String? email;
-  GeoPoint? Location;
+  // GeoPoint? Location;
   String? currency;
   String? phone;
-  int? national_id;
+  String? national_id;
   String? username;
-  double? lang;
-  double? lat;
+  // double? lang;
+  // double? lat;
   UserData({
-    this.lang,
-    this.lat,
-    this.userId,
+    // this.lang,
+    // this.lat,
+    // this.userId,
     this.username,
     this.email,
     this.national_id,
     this.phone,
-    this.accountCreationTime,
+    this.created_time,
     this.pincode,
     this.password,
     this.firstname,
@@ -84,16 +89,16 @@ class UserData {
     this.balance,
     this.currency,
     // required this.birthDate,
-    this.Location,
+    // this.Location,
   });
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      userId: json["userId"],
+      // userId: json["userId"],
       username: json["username"],
       email: json['email'],
       national_id: json['national_id'],
       phone: json['phone'],
-      accountCreationTime: json['created_time'],
+      created_time: json['created_time'],
       pincode: json['pincode'],
       password: json['pass'],
       firstname: json['fname'],
@@ -101,8 +106,31 @@ class UserData {
       address: json['address'],
       balance: json['balance'],
       currency: json['currency'],
-      Location: json['location'],
+      // Location: json['location'],
     );
+  }
+  UserData.fromMap(Map<String, dynamic> mapData) {
+    username = mapData["username"];
+    email = mapData['email'];
+
+    national_id = mapData['national_id'];
+    phone = mapData['phone'];
+    created_time = mapData['created_time'];
+    pincode = mapData['pincode'];
+
+    password = mapData['pass'];
+
+    firstname = mapData['fname'];
+
+    lastName = mapData['lname'];
+
+    address = mapData['address'];
+
+    balance = mapData['balance'];
+
+    currency = mapData['currency'];
+
+    // Location = mapData['location'];
   }
 }
 
@@ -119,18 +147,30 @@ class Users with ChangeNotifier {
 
   FirebaseFirestore? _instance;
 
-  Future<void> getUserData(
-    User? userId,
+  Future<dynamic> getUserData(
+    String? userId,
   ) async {
-    CollectionReference collections =
-        await _instance!.collection("userAccount");
-    final document = await collections.doc(userId.toString()).get();
-    var data = document.data() as Map;
-    var user_data = data[userId] as List<dynamic>;
-    user_data.forEach((fireData) {
-      _userListData.add(UserData.fromJson(fireData));
-    });
-    notifyListeners();
+    try {
+      UserId? id;
+
+      CollectionReference collections =
+          FirebaseFirestore.instance.collection("userAccount");
+      final document =
+          await collections.doc("qIfGcterbkeW9ychFTZsF3abf9o2").get();
+      print(collections.toString() + "Collections");
+      final data = document.data() as Map<String, dynamic>;
+      for (var thisData in data.values) {
+        _userListData.add(thisData);
+      }
+
+      print(data.toString() + "data");
+
+      print(_userListData);
+
+      notifyListeners();
+    } catch (e) {
+      print(e.toString() + "ERRRRROOOORRR");
+    }
   }
 }
  // DateTime? accountCreationTime,

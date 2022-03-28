@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CreditCard extends StatelessWidget {
   const CreditCard({Key? key, required this.text, required this.balance})
       : super(key: key);
-  final double balance;
+  final String balance;
   final String? text;
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class CreditCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                CreditText2(text: "\$${balance.toString()}"),
+                CreditText2(text: balance),
               ],
             ),
             SizedBox(
