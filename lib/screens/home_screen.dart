@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Users _userFireData = Provider.of<Users>(context, listen: false);
+    final _userFireData = Provider.of<DataBase>(context, listen: false);
     UserId userIdProvider = UserId(userId: userId!);
     return StreamBuilder<UserData>(
         stream: DataBase(userIdProvider.userIdGetter).userDataFromFirebase,

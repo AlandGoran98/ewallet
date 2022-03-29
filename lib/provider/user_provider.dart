@@ -15,7 +15,7 @@ class UserId with ChangeNotifier {
   UserId({required this.userId});
 }
 
-class DataBase {
+class DataBase with ChangeNotifier {
   final String userId;
 
   DataBase(this.userId);
@@ -45,7 +45,17 @@ class DataBase {
         .doc(userId)
         .snapshots()
         .map(_userDataFromSnapshot);
-    ;
+  }
+
+  List _userDataFire = [];
+  List get userDataFire {
+    return _userDataFire;
+  }
+
+  addData() {
+    _userDataFire.add(userDataFromFirebase);
+    print(_userDataFire);
+    notifyListeners();
   }
 }
 
@@ -91,6 +101,22 @@ class UserData {
     // required this.birthDate,
     // this.Location,
   });
+  UserData.FromFirestore(QueryDocumentSnapshot<Object?> json) {
+    UserData(
+      username: json["username"],
+      email: json['email'],
+      national_id: json['national_id'],
+      phone: json['phone'],
+      created_time: json['created_time'],
+      pincode: json['pincode'],
+      password: json['pass'],
+      firstname: json['fname'],
+      lastName: json['lname'],
+      address: json['address'],
+      balance: json['balance'],
+      currency: json['currency'],
+    );
+  }
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
       // userId: json["userId"],
@@ -155,18 +181,24 @@ class Users with ChangeNotifier {
 
       CollectionReference collections =
           FirebaseFirestore.instance.collection("userAccount");
-      final document =
-          await collections.doc("qIfGcterbkeW9ychFTZsF3abf9o2").get();
-      print(collections.toString() + "Collections");
-      final data = document.data() as Map<String, dynamic>;
-      for (var thisData in data.values) {
-        _userListData.add(thisData);
-      }
+      final document = await collections.snapshots().listen((snapshot) {
+        _userListData = [];
+        snapshot.docs.forEach((json) {
+          // _userListData.add(DataBase.user)
+        });
+      });
 
-      print(data.toString() + "data");
+      // print(collections.toString() + "Collections");
+      // final data = document.data() as Map<String, dynamic>;
+      // for (var thisData in data.values) {
+      //   // _userListData.add(thisData);
+      // }
 
-      print(_userListData);
+      // print(data.toString() + "data");
 
+      // print(_userListData);
+      print("${userListData} LISTTTT");
+      print("${_userListData} haaaa");
       notifyListeners();
     } catch (e) {
       print(e.toString() + "ERRRRROOOORRR");

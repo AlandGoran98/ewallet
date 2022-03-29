@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // print(userId);
     print("$userIdProvider  this one");
-    Provider.of<Users>(context, listen: false);
+    Provider.of<DataBase>(context, listen: false);
     // print(Provider.of<UserId>(context, listen: false).userId);
     currentUsers();
 
@@ -70,13 +70,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // UserData _userDataProvider = Provider.of(context, listen: false);
 
-    Users _userFireData = Provider.of<Users>(context, listen: false);
-    final UserDataProvider = Provider.of<Users>(context, listen: false)
-        .getUserData(userIdProvider!.userId.toString());
-    final canWeHaveDataPlease =
-        Provider.of<Users>(context, listen: false).userListData;
-    print("$UserDataProvider +++++++++++++");
-    print("$canWeHaveDataPlease -----------");
+    final UserDataProvider =
+        Provider.of<DataBase>(context, listen: false).userDataFromFirebase;
+    print(UserDataProvider);
+    // final canWeHaveDataPlease =
+    //     Provider.of<Users>(context, listen: false).userListData;
+    // print("$UserDataProvider +++++++++++++");
+    // print("$canWeHaveDataPlease -----------");
     // print(UserDataProvider.userListData.toString() + "IS IT WORKING!!??");
     // userDataList = _userFireData.getUserData(userId) as List<UserData>;
     // print(userDataList);

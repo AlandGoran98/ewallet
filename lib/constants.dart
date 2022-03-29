@@ -18,3 +18,5 @@ TextStyle kRobotoChart = GoogleFonts.roboto(
     fontSize: 8, fontWeight: FontWeight.w600, color: Colors.white);
 TextStyle kRobotoBlackBoldDrawer = GoogleFonts.roboto(
     fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black);
+TextStyle kRobotoProfile = GoogleFonts.montserrat(
+    fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF3A3845));

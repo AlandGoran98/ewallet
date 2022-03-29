@@ -1,4 +1,5 @@
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/get_main_data.dart';
 import 'package:ewallet/model/auth_services.dart';
 import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/home.dart';
@@ -69,7 +70,7 @@ class _LoginState extends State<Login> {
       //  user = _user;
       Navigator.pushReplacementNamed(
         context,
-        HomePage.routeName,
+        MyApp.routeName,
       );
     } catch (e) {
       setState(() {
