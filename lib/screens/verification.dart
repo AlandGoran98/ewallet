@@ -1,4 +1,5 @@
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/get_main_data.dart';
 import 'package:ewallet/provider/user_provider.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -123,7 +124,7 @@ class _VerficationsState extends State<Verfications> {
                 UserId userIdProvider = UserId(userId: userId.toString());
 
                 print("${userIdProvider.userId}  this one");
-                Navigator.pushReplacementNamed(context, HomePage.routeName);
+                Navigator.pushReplacementNamed(context, MyApp.routeName);
               },
               child: Text("Next"),
             ),

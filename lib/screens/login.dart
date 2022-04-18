@@ -1,6 +1,7 @@
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/get_main_data.dart';
 import 'package:ewallet/model/auth_services.dart';
+import 'package:ewallet/provider/auth.dart';
 import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/verification.dart';
@@ -65,12 +66,14 @@ class _LoginState extends State<Login> {
       await _auth.signInWithEmailAndPassword(
           email: _emailController.value.text,
           password: _passwordController.value.text);
+      Provider.of<Auth>(context, listen: false)
+          .login(_emailController.value.text, _passwordController.value.text);
       // await _authService.signInWithPhoneNumber(_phoneController.value.text);
 
       //  user = _user;
       Navigator.pushReplacementNamed(
         context,
-        MyApp.routeName,
+        Verfications.routeName,
       );
     } catch (e) {
       setState(() {
@@ -143,41 +146,41 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: 60, vertical: 10),
-                        //   child: Column(
-                        //     children: [
-                        //       Align(
-                        //         alignment: Alignment.bottomLeft,
-                        //         child: Text(
-                        //           "Phone Number",
-                        //           style: kRoboto,
-                        //         ),
-                        //       ),
-                        //       TextFormField(
-                        //         controller: _phoneController,
-                        //         keyboardType: TextInputType.phone,
-                        //         decoration: InputDecoration(
-                        //           hintText: "Phone Number",
-                        //           hintStyle: kRobotoTextField,
-                        //           fillColor: Colors.white,
-                        //           filled: true,
-                        //           border: OutlineInputBorder(
-                        //               borderRadius:
-                        //                   BorderRadius.circular(20.0)),
-                        //         ),
-                        //         validator: (value) {
-                        //           if (value == null ||
-                        //               (value.trim().length == 0)) {
-                        //             return "Please Enter Your Phone Number";
-                        //           }
-                        //           return null;
-                        //         },
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 60, vertical: 10),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  "Phone Number",
+                                  style: kRoboto,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                  hintText: "Phone Number",
+                                  hintStyle: kRobotoTextField,
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                ),
+                                validator: (value) {
+                                  if (value == null ||
+                                      (value.trim().length == 0)) {
+                                    return "Please Enter Your Phone Number";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 60, vertical: 10),
@@ -252,7 +255,7 @@ class _LoginState extends State<Login> {
                             child: TextButton(
                               onPressed: () {},
                               child: Text(
-                                "Forgot Password?",
+                                "Call Sevice",
                                 style: kRoboto,
                               ),
                             ),
