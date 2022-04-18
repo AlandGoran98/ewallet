@@ -44,6 +44,8 @@ dependencies:
   firebase_auth: ^3.3.11
   pinput: ^2.2.4
   lottie: ^1.2.2
+  carousel_slider:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

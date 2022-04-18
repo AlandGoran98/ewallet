@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/provider/user_provider.dart';
+import 'package:ewallet/screens/home_screen_add.dart';
 import 'package:ewallet/widgets/credit_card.dart';
 import 'package:ewallet/widgets/home_prop_cards.dart';
 import 'package:ewallet/widgets/monthly_log.dart';
@@ -56,10 +57,26 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      HomeCards(icon: Icons.import_contacts),
-                      HomeCards(icon: Icons.compare_arrows),
-                      HomeCards(icon: Icons.add_circle_outline),
-                      HomeCards(icon: Icons.shopping_basket),
+                      GestureDetector(
+                          onTap: () {},
+                          child: HomeCards(
+                            icon: Icons.import_contacts,
+                            tap: () {},
+                          )),
+                      HomeCards(
+                        icon: Icons.compare_arrows,
+                        tap: () {},
+                      ),
+                      HomeCards(
+                        icon: Icons.add_circle_outline,
+                        tap: () {},
+                      ),
+                      HomeCards(
+                        icon: Icons.shopping_basket,
+                        tap: () {
+                          Navigator.pushNamed(context, HomePageShop.routeName);
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(

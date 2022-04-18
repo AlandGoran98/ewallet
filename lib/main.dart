@@ -2,13 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ewallet/constants.dart';
 import 'package:ewallet/get_main_data.dart';
 import 'package:ewallet/model/auth_services.dart';
+import 'package:ewallet/provider/auth.dart';
+import 'package:ewallet/provider/cart.dart';
 import 'package:ewallet/provider/log_provider.dart';
+import 'package:ewallet/provider/orders.dart';
+import 'package:ewallet/provider/product_provider.dart';
 import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/provider/user_provider.dart';
+import 'package:ewallet/screens/cart_screen.dart';
 import 'package:ewallet/screens/chart_screen.dart';
+import 'package:ewallet/screens/edit_product_screen.dart';
 import 'package:ewallet/screens/home.dart';
+import 'package:ewallet/screens/home_screen_add.dart';
 import 'package:ewallet/screens/login.dart';
+import 'package:ewallet/screens/orders_scren.dart';
+import 'package:ewallet/screens/product_detail_screen.dart';
+import 'package:ewallet/screens/product_detail_screen.dart';
 import 'package:ewallet/screens/profile_screen.dart';
+import 'package:ewallet/screens/user_products_screen.dart';
 import 'package:ewallet/screens/verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +36,29 @@ void main() async {
         ChangeNotifierProvider.value(
           value: LogItems(),
         ),
-        // Provider(
-        //   create: (context) => AuthenticationServices(FirebaseAuth.instance),
-        // ),
-        // StreamProvider(
-        //     create: (context) =>
-        //         Provider.of<AuthenticationServices>(context).authChangeState,
-        //     initialData: Login()),
 
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: (context) => Products('', '', []),
+          update: (ctx, auth, previousProducts) => Products(
+            auth.token,
+            auth.userId,
+            previousProducts == null ? [] : previousProducts.items,
+          ),
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (context) => Orders('', '', []),
+          update: (ctx, auth, previousOrders) => Orders(
+            auth.token,
+            auth.userId,
+            previousOrders == null ? [] : previousOrders.orders,
+          ),
+        ),
         ChangeNotifierProvider.value(value: ThemeChange()),
 
         ChangeNotifierProvider<DataBase>(
@@ -66,6 +92,12 @@ void main() async {
           ChartStatistics.routeName: (context) => ChartStatistics(),
           Verfications.routeName: (context) => Verfications(),
           MyApp.routeName: (context) => MyApp(),
+          HomePageShop.routeName: (context) => HomePageShop(),
+          ProductDetailScreen.productDetail: (context) => ProductDetailScreen(),
+          CartScreen.cartScreen: (context) => CartScreen(),
+          OrdersScren.routeName: (context) => OrdersScren(),
+          UserProductsScreen.routeName: (context) => UserProductsScreen(),
+          EditProductScreen.routeName: (context) => EditProductScreen(),
         },
         home: SplashScreen(),
       ),
