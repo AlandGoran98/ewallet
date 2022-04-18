@@ -1,5 +1,7 @@
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/get_main_data.dart';
 import 'package:ewallet/model/auth_services.dart';
+import 'package:ewallet/provider/auth.dart';
 import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/verification.dart';
@@ -64,7 +66,9 @@ class _LoginState extends State<Login> {
       await _auth.signInWithEmailAndPassword(
           email: _emailController.value.text,
           password: _passwordController.value.text);
-      await _authService.signInWithPhoneNumber(_phoneController.value.text);
+      Provider.of<Auth>(context, listen: false)
+          .login(_emailController.value.text, _passwordController.value.text);
+      // await _authService.signInWithPhoneNumber(_phoneController.value.text);
 
       //  user = _user;
       Navigator.pushReplacementNamed(
@@ -77,12 +81,13 @@ class _LoginState extends State<Login> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: Duration(seconds: 5),
           backgroundColor: klightPurpule,
           content: Row(
             children: [
               Icon(Icons.delete),
               Text(
-                e.toString(),
+                "invalid Email and Password",
                 style: kRobotoMedium,
               )
             ],
@@ -252,7 +257,7 @@ class _LoginState extends State<Login> {
                             child: TextButton(
                               onPressed: () {},
                               child: Text(
-                                "Forgot Password?",
+                                "Call Sevice",
                                 style: kRoboto,
                               ),
                             ),
