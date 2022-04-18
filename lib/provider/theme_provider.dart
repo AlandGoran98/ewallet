@@ -6,8 +6,8 @@ class ThemeChange with ChangeNotifier {
     return _isLight;
   }
 
-  bool changeTheme() {
-    return _isLight = true;
+  bool changeTheme(bool newValue) {
     notifyListeners();
+    return _isLight = newValue;
   }
 }

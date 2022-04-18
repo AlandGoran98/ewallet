@@ -9,8 +9,10 @@ import 'package:ewallet/provider/orders.dart';
 import 'package:ewallet/provider/product_provider.dart';
 import 'package:ewallet/provider/theme_provider.dart';
 import 'package:ewallet/provider/user_provider.dart';
+import 'package:ewallet/screens/about_us.dart';
 import 'package:ewallet/screens/cart_screen.dart';
 import 'package:ewallet/screens/chart_screen.dart';
+import 'package:ewallet/screens/contact_us.dart';
 import 'package:ewallet/screens/edit_product_screen.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/home_screen_add.dart';
@@ -98,6 +100,8 @@ void main() async {
           OrdersScren.routeName: (context) => OrdersScren(),
           UserProductsScreen.routeName: (context) => UserProductsScreen(),
           EditProductScreen.routeName: (context) => EditProductScreen(),
+          ContactUs.routeName: (context) => ContactUs(),
+          AboutUs.routeName: (context) => AboutUs(),
         },
         home: SplashScreen(),
       ),
