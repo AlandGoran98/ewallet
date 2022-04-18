@@ -1,3 +1,4 @@
+import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/home_screen_add.dart';
 import 'package:ewallet/screens/orders_scren.dart';
 import 'package:ewallet/screens/user_products_screen.dart';
@@ -12,9 +13,17 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           AppBar(
-            title: Text("hello"),
+            title: Text("Shop"),
             automaticallyImplyLeading: false,
           ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text("Home"),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, HomePage.routeName);
+            },
+          ),
+          Divider(),
           ListTile(
             leading: Icon(Icons.shop),
             title: Text("Shop"),
@@ -35,8 +44,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text("Manage Products"),
             onTap: () {
-              Navigator.pushReplacementNamed(
-                  context, UserProductsScreen.routeName);
+              Navigator.pushNamed(context, UserProductsScreen.routeName);
             },
           ),
         ],

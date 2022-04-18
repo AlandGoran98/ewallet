@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:ewallet/constants.dart';
+import 'package:ewallet/screens/about_us.dart';
+import 'package:ewallet/screens/contact_us.dart';
 import 'package:ewallet/screens/home.dart';
 import 'package:ewallet/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +34,7 @@ class DrawerWidget extends StatelessWidget {
             ),
           ),
           TextButtonDrawer(
-            text: "Profile",
+            text: "Home",
             function: () {
               Navigator.pushReplacementNamed(context, HomePage.routeName);
             },
@@ -47,11 +49,15 @@ class DrawerWidget extends StatelessWidget {
           ),
           TextButtonDrawer(
             text: "About Us",
-            function: () {},
+            function: () {
+              Navigator.pushNamed(context, AboutUs.routeName);
+            },
           ),
           TextButtonDrawer(
             text: "Contact Us On",
-            function: () {},
+            function: () {
+              Navigator.pushNamed(context, ContactUs.routeName);
+            },
           ),
           TextButtonDrawer(
             text: "Logout",

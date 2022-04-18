@@ -97,6 +97,13 @@ class _VerficationsState extends State<Verfications> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Code Verification",
+              style: kRobotoWhiteLarge,
+            ),
+            SizedBox(
+              height: 50,
+            ),
             Pinput(
               length: 6,
               pinAnimationType: PinAnimationType.slide,

@@ -90,8 +90,16 @@ class _HomePageState extends State<HomePage> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: 20,
+                child: ClipOval(
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.asset(
+                    'assets/aland.jpg',
+                    width: 53,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             )
           ],
